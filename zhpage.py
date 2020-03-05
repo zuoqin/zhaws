@@ -37,6 +37,7 @@ def deal_scrape(page):
       introduction = ''.join(map(str, teasers[0].div.contents))
 
     image = item.findAll('div', {'class': 'teaser-image'})[0].img['src']
+    image = image.replace('/s3/files', 'https://zerohedge.com/s3/files')
     for li in item.footer.ul:
         if li.get('class')[0] == 'extras__created':
             updated = li.span.text

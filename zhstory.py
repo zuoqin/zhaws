@@ -11,20 +11,29 @@ def scrape(event, context):
       qp = event['queryStringParameters']['url']
     data = deal_scrape(qp)
     html = """
-<!DOCTYPE html>
-<html>
-<body>
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>{}</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+    <body>
 
-<h1>{}</h1>
-{}
-<p>{}</p>
+    <h1>{}</h1>
+    {}
+    <p>{}</p>
 
-</body>
-</html>
+    </body>
+    </html>
     """
     return {
         'statusCode': 200,
-        'body': html.format(data['title'], data['body'], data['updated'])
+        'headers': {"content-type": "text/html"},
+        'body': html.format(data['title'], data['title'], data['body'], data['updated'])
     }
 
 def deal_scrape(article):
@@ -39,7 +48,7 @@ def deal_scrape(article):
   item = div
   title = ''.join(map(str, item.findAll('h1', {'class': "page-title"})[0].span.contents))
 
-  body = ''.join(map(str,  item.findAll('div', {'class': "node__content"})[0].contents))
+  body = ''.join(map(str,  item.findAll('div', {'class': "node__content"})[0].findAll('div', {'property': "schema:text"})[0].contents))
 
   updated = item.findAll('div', {'class': "submitted-datetime"})[0].span.text
 
