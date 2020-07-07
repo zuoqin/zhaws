@@ -49,6 +49,12 @@ def deal_scrape(article):
   title = ''.join(map(str, item.findAll('h1', {'class': "page-title"})[0].span.contents))
 
   body = ''.join(map(str,  item.findAll('div', {'class': "node__content"})[0].findAll('div', {'property': "schema:text"})[0].contents))
+  body = body.replace("https://www.zerohedge.com/news", "https://news.ehedge.xyz/story?url=%2Fnews")
+  body = body.replace("https://www.zerohedge.com/article", "https://news.ehedge.xyz/story?url=%2Farticle")
+  body = body.replace("https://www.zerohedge.com/markets", "https://news.ehedge.xyz/story?url=%2Fmarkets")
+  body = body.replace("https://www.zerohedge.com/health", "https://news.ehedge.xyz/story?url=%2Fhealth")
+  body = body.replace("https://www.zerohedge.com/economics", "https://news.ehedge.xyz/story?url=%2Feconomics")
+  body = body.replace("/s3/files", "https://www.zerohedge.com/s3/files")
 
   updated = item.findAll('div', {'class': "submitted-datetime"})[0].span.text
 
